@@ -6,12 +6,41 @@ import store from "./store";
 import "./utils/setRem";
 // 引入vant样式
 import "vant/lib/index.css";
+import "./assets/iconfont";
 
-import { Button } from "vant";
+import {
+   Button,
+   Field,
+   Tab,
+   Tabs,
+   List,
+   Cell,
+   CellGroup,
+   Icon,
+   Row,
+   Col,
+   Checkbox,
+   CheckboxGroup,
+   Collapse,
+   CollapseItem
+  } from "vant";
 
 Vue.config.productionTip = false;
 
-Vue.use(Button);
+Vue.use(Button)
+  .use(Field)
+  .use(Tab)
+  .use(Tabs)
+  .use(List)
+  .use(Cell)
+  .use(CellGroup)
+  .use(Icon)
+  .use(Row)
+  .use(Col)
+  .use(Checkbox)
+  .use(CheckboxGroup)
+  .use(Collapse)
+  .use(CollapseItem);
 
 new Vue({
   router,
