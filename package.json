@@ -10,6 +10,8 @@
   "dependencies": {
     "core-js": "^2.6.5",
     "postcss-pxtorem": "^4.0.1",
+    "reset-css": "^4.0.1",
+    "tar": "^4.4.8",
     "vant": "^1.6.17",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",

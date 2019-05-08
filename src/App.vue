@@ -1,6 +1,6 @@
 <template>
   <transition>
-    <router-view></router-view>
+    <router-view />
   </transition>
 </template>
 
@@ -15,7 +15,7 @@ export default {
 html,
 body {
   height: 100%;
-  background-color: rgb(243, 243, 243);
+  background-color: rgb(240, 240, 246);
 }
 // symbol格式icon
 .icon {
