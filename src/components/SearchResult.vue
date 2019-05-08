@@ -4,6 +4,7 @@
       v-for="(parent, pindex) in result_list"
       :key="pindex"
       class="result-cell"
+      @click="handleDetail(parent)"
     >
       <div class="result">
         <p class="title">推荐方案{{ pindex + 1 }}</p>
@@ -22,12 +23,17 @@
         </div>
       </div>
     </li>
+    <result-detail :detail_item="detail_item" ref="DetailItem"></result-detail>
   </ul>
 </template>
 
 <script>
+import ResultDetail from "_c/ResultDetail";
 export default {
   name: "SearchResult",
+  components: {
+    "result-detail": ResultDetail
+  },
   props: {
     result_list: {
       type: Array,
@@ -35,7 +41,15 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      detail_item: {}
+    };
+  },
+  methods: {
+    handleDetail(item) {
+      this.detail_item = item;
+      this.$refs.DetailItem.showView();
+    }
   }
 };
 </script>

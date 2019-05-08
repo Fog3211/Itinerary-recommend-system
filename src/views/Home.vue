@@ -67,7 +67,6 @@
 
 <script>
 import SearchResult from "_c/SearchResult";
-import { setTimeout } from "timers";
 export default {
   components: {
     "search-result": SearchResult
@@ -114,6 +113,18 @@ export default {
           time: "16小时07分钟",
           money: "4536",
           way: [
+            {
+              name: "高铁12号线",
+              start_time: "10:22"
+            },
+            {
+              name: "133号航班",
+              start_time: "12:22"
+            },
+            {
+              name: "地铁21号线",
+              start_time: "04:22"
+            },
             {
               name: "高铁12号线",
               start_time: "10:22"
@@ -214,7 +225,7 @@ export default {
 <style lang="scss" scoped>
 .container {
   padding-top: 20px;
-
+  overflow: hidden;
   .input-box {
     height: 100px;
     background-color: #fff;
@@ -240,8 +251,8 @@ export default {
   .result-box {
     position: relative;
     border-bottom: 1px solid #ddd;
-    min-height: 500px;
-    max-height: 500px;
+    min-height: 450px;
+    max-height: 450px;
     overflow: auto;
     margin-top: 5px;
     .loading-box {
