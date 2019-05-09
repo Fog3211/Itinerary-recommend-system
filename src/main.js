@@ -10,7 +10,10 @@ import "vant/lib/index.css";
 import "reset-css";
 // 引入阿里图标库
 import "./assets/iconfont";
+// 引入高德地图
+import VueAMap from "vue-amap";
 
+// 引入vant组件
 import {
   Button,
   Field,
@@ -48,6 +51,24 @@ Vue.use(Button)
   .use(CollapseItem)
   .use(Step)
   .use(Steps);
+
+Vue.use(VueAMap);
+
+VueAMap.initAMapApiLoader({
+  key: "bc59a856421ca0230bae733a075a42e1",
+  plugin: [
+    "AMap.Autocomplete",
+    "AMap.PlaceSearch",
+    "AMap.Scale",
+    "AMap.OverView",
+    "AMap.ToolBar",
+    "AMap.MapType",
+    "AMap.PolyEditor",
+    "AMap.CircleEditor"
+  ],
+  // 默认高德 sdk 版本为 1.4.4
+  v: "1.4.4"
+});
 
 new Vue({
   router,
