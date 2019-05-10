@@ -62,7 +62,7 @@ export default {
   .map-box {
     position: relative;
     height: 40vh;
-    background-color: bisque;
+    background-color: #fcf9f2;
     .back-icon {
       position: absolute;
       top: 5px;

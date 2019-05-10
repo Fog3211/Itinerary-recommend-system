@@ -2,7 +2,7 @@
   <div class="container">
     <van-row type="flex" align="center" class="input-box">
       <van-col span="2" class="exchange">
-        <svg class="icon" aria-hidden="true">
+        <svg class="icon" aria-hidden="true" @click="toggleInput">
           <use xlink:href="#icon-wanmeiicon-"></use>
         </svg>
       </van-col>
@@ -151,7 +151,14 @@ export default {
     }
   },
   methods: {
+    toggleInput() {
+      let temp = this.position.start;
+      this.position.start = this.position.end;
+      this.position.end = temp;
+      console.log(this.position);
+    },
     handleSearch() {
+      console.log(this.position);
       // 获取查询结果
       this.loading = true;
       setTimeout(() => {
@@ -214,6 +221,72 @@ export default {
                 start_time: "04:22"
               }
             ]
+          },
+          {
+            time: "8小时18分钟",
+            money: "998",
+            way: [
+              {
+                name: "地铁1号线",
+                start_time: "10:22"
+              },
+              {
+                name: "22号航班",
+                start_time: "12:22"
+              },
+              {
+                name: "高铁3号线",
+                start_time: "04:22"
+              },
+              {
+                name: "航班44号线",
+                start_time: "04:22"
+              }
+            ]
+          },
+          {
+            time: "8小时18分钟",
+            money: "998",
+            way: [
+              {
+                name: "地铁1号线",
+                start_time: "10:22"
+              },
+              {
+                name: "22号航班",
+                start_time: "12:22"
+              },
+              {
+                name: "高铁3号线",
+                start_time: "04:22"
+              },
+              {
+                name: "航班44号线",
+                start_time: "04:22"
+              }
+            ]
+          },
+          {
+            time: "8小时18分钟",
+            money: "998",
+            way: [
+              {
+                name: "地铁1号线",
+                start_time: "10:22"
+              },
+              {
+                name: "22号航班",
+                start_time: "12:22"
+              },
+              {
+                name: "高铁3号线",
+                start_time: "04:22"
+              },
+              {
+                name: "航班44号线",
+                start_time: "04:22"
+              }
+            ]
           }
         ];
       }, 2000);
@@ -238,6 +311,9 @@ export default {
         font-size: 24px;
         font-weight: bolder;
         text-align: center;
+        &:active {
+          background-color: rgb(235, 229, 229);
+        }
       }
     }
     .position {
@@ -250,9 +326,7 @@ export default {
   }
   .result-box {
     position: relative;
-    border-bottom: 1px solid #ddd;
-    min-height: 450px;
-    max-height: 450px;
+    height: 65vh;
     overflow: auto;
     margin-top: 5px;
     .loading-box {
