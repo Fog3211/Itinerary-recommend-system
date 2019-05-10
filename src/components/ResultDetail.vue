@@ -69,6 +69,7 @@ export default {
       left: 5px;
       font-size: 26px;
       color: #aaa;
+      z-index: 999;
     }
   }
   .deatil-cell {

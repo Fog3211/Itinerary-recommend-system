@@ -43,7 +43,7 @@
       </van-collapse-item>
     </van-collapse>
     <div class="tabs">
-      <van-tabs v-model="active_tab" animated swipeable color="#1989fa">
+      <van-tabs v-model="active_tab" animated color="#1989fa">
         <van-tab v-for="(item, index) in tab_list" :key="index">
           <div slot="title">
             <svg class="icon" aria-hidden="true">
