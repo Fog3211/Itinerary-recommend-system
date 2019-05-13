@@ -1,0 +1,60 @@
+@font-face {
+  font-family: "iconfont";
+  src: url('iconfont.ttf?t=1557749337321') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.chaxun:before {
+  content: "\e600";
+}
+
+.jiaotong:before {
+  content: "\e602";
+}
+
+.ditie:before {
+  content: "\e63e";
+}
+
+.feiji:before {
+  content: "\e63f";
+}
+
+.jiaohuan:before {
+  content: "\e615";
+}
+
+.gaotie:before {
+  content: "\eb54";
+}
+
+.dingwei:before {
+  content: "\e79c";
+}
+
+.huafei:before {
+  content: "\e642";
+}
+
+.shijian:before {
+  content: "\e686";
+}
+
+.zhongdian:before {
+  content: "\e65f";
+}
+
+.buxing:before {
+  content: "\e73d";
+}
+
+.qidian:before {
+  content: "\e601";
+}

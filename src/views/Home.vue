@@ -3,20 +3,30 @@
     <van-row type="flex" align="center" class="input-box">
       <van-col span="2" class="exchange">
         <svg class="icon" aria-hidden="true" @click="toggleInput">
-          <use xlink:href="#icon-wanmeiicon-"></use>
+          <use xlink:href="#jiaohuan"></use>
         </svg>
       </van-col>
       <van-col span="18" class="position">
-        <van-field
-          v-model="position.start"
-          placeholder="请输入起点"
-          right-icon="location"
-        />
-        <van-field
-          v-model="position.end"
-          placeholder="请输入终点"
-          right-icon="location"
-        />
+        <van-field v-model="position.start" placeholder="请输入起点">
+          <div slot="left-icon">
+            <svg class="icon solt-icon" aria-hidden="true">
+              <use xlink:href="#qidian"></use>
+            </svg>
+          </div>
+          <div slot="right-icon">
+            <!-- 定位选择 -->
+            <svg class="icon solt-icon solt-icon-nomargin" aria-hidden="true">
+              <use xlink:href="#dingwei"></use>
+            </svg>
+          </div>
+        </van-field>
+        <van-field v-model="position.end" placeholder="请输入终点">
+          <div slot="left-icon">
+            <svg class="icon solt-icon" aria-hidden="true">
+              <use xlink:href="#zhongdian"></use>
+            </svg>
+          </div>
+        </van-field>
       </van-col>
       <van-col span="4">
         <van-button type="info" round size="mini" @click="handleSearch">
@@ -26,7 +36,12 @@
     </van-row>
     <!-- 多选交通工具 -->
     <van-collapse v-model="active_vehicle" class="select-vehicle">
-      <van-collapse-item title="组合交通" name="1" icon="logistics">
+      <van-collapse-item title="组合交通" name="1" style="font-weight:bold;">
+        <div slot="icon">
+          <svg class="icon solt-icon" aria-hidden="true">
+            <use xlink:href="#jiaotong"></use>
+          </svg>
+        </div>
         <van-checkbox-group v-model="vehicle_result">
           <van-cell-group>
             <van-cell
@@ -34,8 +49,12 @@
               clickable
               :key="index"
               :title="item.name"
-              :icon="item.icon"
             >
+              <div slot="icon">
+                <svg class="icon solt-icon" aria-hidden="true">
+                  <use :xlink:href="item.icon"></use>
+                </svg>
+              </div>
               <van-checkbox :name="item.name" ref="checkboxes" />
             </van-cell>
           </van-cell-group>
@@ -81,15 +100,15 @@ export default {
       tab_list: [
         {
           title: "时间最短",
-          icon: "#icon-shijian"
+          icon: "#shijian"
         },
         {
           title: "花费最少",
-          icon: "#icon-bixuhuafei"
+          icon: "#huafei"
         },
         {
           title: "换乘最少",
-          icon: "#icon--_buhang"
+          icon: "#buxing"
         }
       ],
       active_vehicle: [],
@@ -97,15 +116,15 @@ export default {
       vehicle_list: [
         {
           name: "地铁",
-          icon: "star-o"
+          icon: "#ditie"
         },
         {
           name: "高铁",
-          icon: "phone-o"
+          icon: "#gaotie"
         },
         {
           name: "飞机",
-          icon: "like-o"
+          icon: "#feiji"
         }
       ],
       result_list: [
@@ -341,6 +360,13 @@ export default {
         color: #ccc;
       }
     }
+  }
+}
+.solt-icon {
+  margin-right: 10px;
+  font-size: 24px;
+  &-nomargin{
+  margin-right: 0;
   }
 }
 </style>

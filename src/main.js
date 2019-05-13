@@ -9,7 +9,8 @@ import "vant/lib/index.css";
 // 去除默认样式
 import "reset-css";
 // 引入阿里图标库
-import "./assets/iconfont";
+import "./assets/iconfont.css";
+import "./assets/iconfont.js";
 // 引入地图
 import VueAMap from "vue-amap";
 
