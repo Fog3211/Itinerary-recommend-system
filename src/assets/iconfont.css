@@ -1,6 +1,6 @@
 @font-face {
   font-family: "iconfont";
-  src: url('iconfont.ttf?t=1557749337321') format('truetype');
+  src: url('iconfont.ttf?t=1557847552728') format('truetype');
 }
 
 .iconfont {
@@ -41,6 +41,10 @@
 
 .huafei:before {
   content: "\e642";
+}
+
+.shaixuan:before {
+  content: "\e665";
 }
 
 .shijian:before {

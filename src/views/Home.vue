@@ -61,6 +61,18 @@
         </van-checkbox-group>
       </van-collapse-item>
     </van-collapse>
+    <van-collapse v-model="active_select" class="select-vehicle">
+      <van-collapse-item title="高级筛选" name="1" style="font-weight:bold;">
+        <div slot="icon">
+          <svg class="icon solt-icon" aria-hidden="true">
+            <use xlink:href="#shaixuan"></use>
+          </svg>
+        </div>
+        <van-cell-group>
+          <van-field v-model="start_time" placeholder="出行时间" />
+        </van-cell-group>
+      </van-collapse-item>
+    </van-collapse>
     <div class="tabs">
       <van-tabs v-model="active_tab" animated color="#1989fa">
         <van-tab v-for="(item, index) in tab_list" :key="index">
@@ -134,15 +146,21 @@ export default {
           way: [
             {
               name: "高铁12号线",
-              start_time: "10:22"
+              start_time: "10:22",
+              pos_start:"北京站",
+              pos_end:"南京站"
             },
             {
               name: "133号航班",
-              start_time: "12:22"
+              start_time: "12:22",
+                pos_start:"上海站",
+              pos_end:"青岛站"
             },
             {
               name: "地铁21号线",
-              start_time: "04:22"
+              start_time: "04:22",
+                pos_start:"青岛北站",
+              pos_end:"港头李站"
             },
             {
               name: "高铁12号线",
@@ -159,7 +177,9 @@ export default {
           ]
         }
       ],
-      loading: false
+      loading: false,
+      start_time: "",
+      active_select: []
     };
   },
   watch: {
@@ -365,8 +385,8 @@ export default {
 .solt-icon {
   margin-right: 10px;
   font-size: 24px;
-  &-nomargin{
-  margin-right: 0;
+  &-nomargin {
+    margin-right: 0;
   }
 }
 </style>
