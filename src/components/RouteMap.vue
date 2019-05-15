@@ -1,6 +1,6 @@
 <template>
   <div class="amap-wrapper">
-    <el-amap class="amap-box" vid="amap-vue"></el-amap>
+    <el-amap class="amap-box" vid="amap"></el-amap>
   </div>
 </template>
 

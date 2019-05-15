@@ -1,5 +1,6 @@
 <template>
-  <div v-show="show" class="detail">
+  <!-- v-show会有bug，地图第二次加载不出来 -->
+  <div v-if="show" class="detail">
     <div class="map-box">
       <van-icon name="close" class="back-icon" @click="closeView" />
       <route-map></route-map>

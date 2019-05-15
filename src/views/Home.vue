@@ -13,7 +13,7 @@
               <use xlink:href="#qidian"></use>
             </svg>
           </div>
-          <div slot="right-icon" @click="location">
+          <div slot="right-icon" @click="locationStart">
             <!-- 定位选择 -->
             <svg class="icon solt-icon solt-icon-nomargin" aria-hidden="true">
               <use xlink:href="#dingwei"></use>
@@ -26,7 +26,7 @@
               <use xlink:href="#zhongdian"></use>
             </svg>
           </div>
-          <div slot="right-icon" @click="location">
+          <div slot="right-icon" @click="locationEnd">
             <svg class="icon solt-icon solt-icon-nomargin" aria-hidden="true">
               <use xlink:href="#dingwei"></use>
             </svg>
@@ -313,28 +313,6 @@ export default {
                 start_time: "04:22"
               }
             ]
-          },
-          {
-            time: "8小时18分钟",
-            money: "998",
-            way: [
-              {
-                name: "地铁1号线",
-                start_time: "10:22"
-              },
-              {
-                name: "22号航班",
-                start_time: "12:22"
-              },
-              {
-                name: "高铁3号线",
-                start_time: "04:22"
-              },
-              {
-                name: "航班44号线",
-                start_time: "04:22"
-              }
-            ]
           }
         ];
       }, 2000);
@@ -360,10 +338,22 @@ export default {
         .toString()
         .padStart(2, "0")}分`;
     },
-    location() {
+    locationStart() {
       // console.log("定位当前坐标");
-      this.$router.push("/location");
+      this.$router.push("/location?pos=start");
+    },
+    locationEnd() {
+      this.$router.push("/location?pos=end");
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      // 更新出发地目的地
+      const location_start = sessionStorage.getItem("location_start");
+      const location_end = sessionStorage.getItem("location_end");
+      this.position.start = location_start;
+      this.position.end = location_end;
+    });
   }
 };
 </script>
