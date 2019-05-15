@@ -1,6 +1,6 @@
 @font-face {
   font-family: "iconfont";
-  src: url('iconfont.ttf?t=1557847552728') format('truetype');
+  src: url('iconfont.ttf?t=1557881590623') format('truetype');
 }
 
 .iconfont {
@@ -49,6 +49,10 @@
 
 .shijian:before {
   content: "\e686";
+}
+
+.nurse:before {
+  content: "\e789";
 }
 
 .zhongdian:before {

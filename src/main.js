@@ -31,7 +31,9 @@ import {
   Collapse,
   CollapseItem,
   Step,
-  Steps
+  Steps,
+  DatetimePicker,
+  Popup
 } from "vant";
 
 Vue.config.productionTip = false;
@@ -51,7 +53,9 @@ Vue.use(Button)
   .use(Collapse)
   .use(CollapseItem)
   .use(Step)
-  .use(Steps);
+  .use(Steps)
+  .use(DatetimePicker)
+  .use(Popup);
 
 setTimeout(() => {
   localStorage.clear();

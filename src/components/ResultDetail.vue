@@ -17,7 +17,9 @@
         >
           <h3 class="name">{{ item.name }}</h3>
           <p>出发时间：{{ item.start_time }}</p>
-          <p v-if="item.pos_start&&item.pos_end">站点：{{ item.pos_start }} -> {{ item.pos_end }}</p>
+          <p v-if="item.pos_start && item.pos_end">
+            站点：{{ item.pos_start }} -> {{ item.pos_end }}
+          </p>
         </van-step>
       </div>
     </van-steps>

@@ -69,7 +69,20 @@
           </svg>
         </div>
         <van-cell-group>
-          <van-field v-model="start_time" placeholder="出行时间" />
+          <van-field v-model="start_time" placeholder="请选择出行时间" readonly>
+            <div slot="left-icon">
+              <svg class="icon solt-icon" aria-hidden="true">
+                <use xlink:href="#nurse"></use>
+              </svg>
+            </div>
+            <van-button
+              slot="button"
+              size="small"
+              type="info"
+              @click="showTimeSelect"
+              >选择</van-button
+            >
+          </van-field>
         </van-cell-group>
       </van-collapse-item>
     </van-collapse>
@@ -93,6 +106,16 @@
         </van-tab>
       </van-tabs>
     </div>
+    <!-- 时间选择器 当前时间到未来十五天-->
+    <van-popup v-model="select_time_show" position="bottom">
+      <van-datetime-picker
+        type="datetime"
+        :min-date="minDate"
+        :max-date="maxDate"
+        @confirm="selectTime"
+        @cancel="hiddenTimeSelect"
+      />
+    </van-popup>
   </div>
 </template>
 
@@ -147,20 +170,20 @@ export default {
             {
               name: "高铁12号线",
               start_time: "10:22",
-              pos_start:"北京站",
-              pos_end:"南京站"
+              pos_start: "北京站",
+              pos_end: "南京站"
             },
             {
               name: "133号航班",
               start_time: "12:22",
-                pos_start:"上海站",
-              pos_end:"青岛站"
+              pos_start: "上海站",
+              pos_end: "青岛站"
             },
             {
               name: "地铁21号线",
               start_time: "04:22",
-                pos_start:"青岛北站",
-              pos_end:"港头李站"
+              pos_start: "青岛北站",
+              pos_end: "港头李站"
             },
             {
               name: "高铁12号线",
@@ -179,7 +202,10 @@ export default {
       ],
       loading: false,
       start_time: "",
-      active_select: []
+      active_select: [],
+      select_time_show: false,
+      minDate: "",
+      maxDate: ""
     };
   },
   watch: {
@@ -329,6 +355,27 @@ export default {
           }
         ];
       }, 2000);
+    },
+    showTimeSelect() {
+      this.select_time_show = true;
+      this.minDate = new Date();
+      this.maxDate = new Date(new Date().setDate(new Date().getDate() + 15));
+    },
+    hiddenTimeSelect() {
+      this.select_time_show = false;
+    },
+    selectTime(value) {
+      this.start_time = this.formatDate(value);
+      this.select_time_show = false;
+    },
+    formatDate(value) {
+      return `${value.getMonth() + 1}月${value.getDate()}日 ${value
+        .getHours()
+        .toString()
+        .padStart(2, "0")}时${value
+        .getMinutes()
+        .toString()
+        .padStart(2, "0")}分`;
     }
   }
 };
