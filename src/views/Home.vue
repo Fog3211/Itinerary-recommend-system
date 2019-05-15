@@ -13,7 +13,7 @@
               <use xlink:href="#qidian"></use>
             </svg>
           </div>
-          <div slot="right-icon">
+          <div slot="right-icon" @click="location">
             <!-- 定位选择 -->
             <svg class="icon solt-icon solt-icon-nomargin" aria-hidden="true">
               <use xlink:href="#dingwei"></use>
@@ -24,6 +24,11 @@
           <div slot="left-icon">
             <svg class="icon solt-icon" aria-hidden="true">
               <use xlink:href="#zhongdian"></use>
+            </svg>
+          </div>
+          <div slot="right-icon" @click="location">
+            <svg class="icon solt-icon solt-icon-nomargin" aria-hidden="true">
+              <use xlink:href="#dingwei"></use>
             </svg>
           </div>
         </van-field>
@@ -220,10 +225,10 @@ export default {
       let temp = this.position.start;
       this.position.start = this.position.end;
       this.position.end = temp;
-      console.log(this.position);
+      // console.log(this.position);
     },
     handleSearch() {
-      console.log(this.position);
+      // console.log(this.position);
       // 获取查询结果
       this.loading = true;
       setTimeout(() => {
@@ -330,28 +335,6 @@ export default {
                 start_time: "04:22"
               }
             ]
-          },
-          {
-            time: "8小时18分钟",
-            money: "998",
-            way: [
-              {
-                name: "地铁1号线",
-                start_time: "10:22"
-              },
-              {
-                name: "22号航班",
-                start_time: "12:22"
-              },
-              {
-                name: "高铁3号线",
-                start_time: "04:22"
-              },
-              {
-                name: "航班44号线",
-                start_time: "04:22"
-              }
-            ]
           }
         ];
       }, 2000);
@@ -376,6 +359,10 @@ export default {
         .getMinutes()
         .toString()
         .padStart(2, "0")}分`;
+    },
+    location() {
+      // console.log("定位当前坐标");
+      this.$router.push("/location");
     }
   }
 };

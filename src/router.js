@@ -12,12 +12,17 @@ export default new Router({
     {
       path: "/404",
       name: "404",
-      component: () => import("_v/NoFound.vue")
+      component: () => import("_v/NoFound")
     },
     {
       path: "/",
       name: "home",
-      component: () => import("_v/Home.vue")
+      component: () => import("_v/Home")
+    },
+    {
+      path: "/location",
+      name: "location",
+      component: () => import("_c/MapLication")
     }
   ]
 });

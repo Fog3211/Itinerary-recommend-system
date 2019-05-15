@@ -1,11 +1,15 @@
 <template>
   <div class="amap-wrapper">
-    <el-amap class="amap-box" :vid="'amap-vue'"></el-amap>
+    <el-amap class="amap-box" vid="amap-vue"></el-amap>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {};
+  }
+};
 </script>
 
 <style lang="scss" scoped>
