@@ -12,7 +12,7 @@ export default new Router({
     {
       path: "/404",
       name: "404",
-      component: () => import("_v/NoFound")
+      component: () => import("_v/NotFound")
     },
     {
       path: "/",

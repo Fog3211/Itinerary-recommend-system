@@ -360,7 +360,6 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  padding-top: 20px;
   overflow: hidden;
   .input-box {
     height: 100px;
@@ -380,7 +379,7 @@ export default {
       }
     }
     .position {
-      border: 1px solid rgb(235, 229, 229);
+      border: 2px solid rgb(235, 229, 229);
       border-radius: 10%;
     }
   }
