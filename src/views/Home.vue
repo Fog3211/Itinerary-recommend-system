@@ -7,7 +7,11 @@
         </svg>
       </van-col>
       <van-col span="18" class="position">
-        <van-field v-model="position.start" placeholder="请输入起点">
+        <van-field
+          v-model="position.start"
+          placeholder="请输入起点"
+          name="起点"
+        >
           <div slot="left-icon">
             <svg class="icon solt-icon" aria-hidden="true">
               <use xlink:href="#qidian"></use>
@@ -20,7 +24,7 @@
             </svg>
           </div>
         </van-field>
-        <van-field v-model="position.end" placeholder="请输入终点">
+        <van-field v-model="position.end" placeholder="请输入终点" name="终点">
           <div slot="left-icon">
             <svg class="icon solt-icon" aria-hidden="true">
               <use xlink:href="#zhongdian"></use>
@@ -92,7 +96,12 @@
       </van-collapse-item>
     </van-collapse>
     <div class="tabs">
-      <van-tabs v-model="active_tab" animated color="#1989fa">
+      <van-tabs
+        v-model="active_tab"
+        animated
+        color="#1989fa"
+        @change="changeSortType"
+      >
         <van-tab v-for="(item, index) in tab_list" :key="index">
           <div slot="title">
             <svg class="icon" aria-hidden="true">
@@ -126,6 +135,9 @@
 
 <script>
 import SearchResult from "_c/SearchResult";
+import axios from "axios";
+import { Toast } from "vant";
+
 export default {
   components: {
     "search-result": SearchResult
@@ -151,6 +163,7 @@ export default {
           icon: "#buxing"
         }
       ],
+      sort_index: 0, //排序规则
       active_vehicle: [],
       vehicle_result: ["地铁", "高铁", "飞机"],
       vehicle_list: [
@@ -228,94 +241,52 @@ export default {
       // console.log(this.position);
     },
     handleSearch() {
-      // console.log(this.position);
-      // 获取查询结果
+      // 检查输入
+      if (!this.checkInput()) {
+        Toast("请检查输入");
+        return;
+      }
+      let sort_index = "time";
+      if (this.sort_index === 1) {
+        sort_index = "price";
+      } else if (this.sort_index === 2) {
+        sort_index = "changnum";
+      } else {
+        sort_index = "time";
+      }
+      const req_data = {
+        start: this.position.start.trim(),
+        end: this.position.end.trim(),
+        vehicle: this.vehicle_result,
+        sort_type: sort_index
+      };
+      console.log("发送的数据", req_data);
       this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-        this.result_list = [
-          {
-            time: "2小时38分钟",
-            money: "168",
-            way: [
-              {
-                name: "地铁1号线",
-                start_time: "10:22"
-              },
-              {
-                name: "地铁1333号线",
-                start_time: "12:22"
-              },
-              {
-                name: "地铁2号线",
-                start_time: "04:22"
-              }
-            ]
-          },
-          {
-            time: "6小时32分钟",
-            money: "456",
-            way: [
-              {
-                name: "高铁1号线",
-                start_time: "10:22"
-              },
-              {
-                name: "1号航班",
-                start_time: "12:22"
-              },
-              {
-                name: "地铁2号线",
-                start_time: "04:22"
-              }
-            ]
-          },
-          {
-            time: "8小时18分钟",
-            money: "998",
-            way: [
-              {
-                name: "地铁1号线",
-                start_time: "10:22"
-              },
-              {
-                name: "22号航班",
-                start_time: "12:22"
-              },
-              {
-                name: "高铁3号线",
-                start_time: "04:22"
-              },
-              {
-                name: "航班44号线",
-                start_time: "04:22"
-              }
-            ]
-          },
-          {
-            time: "8小时18分钟",
-            money: "998",
-            way: [
-              {
-                name: "地铁1号线",
-                start_time: "10:22"
-              },
-              {
-                name: "22号航班",
-                start_time: "12:22"
-              },
-              {
-                name: "高铁3号线",
-                start_time: "04:22"
-              },
-              {
-                name: "航班44号线",
-                start_time: "04:22"
-              }
-            ]
-          }
-        ];
-      }, 2000);
+      axios
+        .post("/roadindex", JSON.stringify(req_data))
+        .then(res => {
+          this.loading = false;
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    checkInput() {
+      if (
+        !this.position.start ||
+        !this.position.start.trim() ||
+        !this.position.end ||
+        !this.position.end.trim()
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    // 改变排序规则
+    changeSortType(index) {
+      this.sort_index = index;
     },
     showTimeSelect() {
       this.select_time_show = true;

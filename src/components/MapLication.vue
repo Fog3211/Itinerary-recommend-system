@@ -1,5 +1,6 @@
 <template>
   <div class="amap-wrapper">
+    <van-icon name="close" class="back-icon" @click="handleBack" />
     <el-amap-search-box
       class="search-box"
       :search-option="searchOption"
@@ -98,6 +99,9 @@ export default {
             // on cancel
           });
       }, 1500);
+    },
+    handleBack() {
+      this.$router.back(-1);
     }
   }
 };
@@ -108,13 +112,21 @@ export default {
   width: 100%;
   height: 100%;
   .search-box {
-    width: 90%;
+    width: 80%;
     position: absolute;
     // 大写px防止rem转换
     top: 20PX;
-    left: 10px;
+    left: 40px;
     font-size: 18PX;
     opacity: 0.85;
+  }
+  .back-icon {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    color: #aaa;
+    font-size: 22px;
+    z-index: 999;
   }
 }
 </style>

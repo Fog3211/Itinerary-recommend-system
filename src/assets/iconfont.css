@@ -1,6 +1,6 @@
 @font-face {
   font-family: "iconfont";
-  src: url('iconfont.ttf?t=1557881590623') format('truetype');
+  src: url('iconfont.ttf?t=1559351394686') format('truetype'),
 }
 
 .iconfont {
@@ -13,6 +13,10 @@
 
 .chaxun:before {
   content: "\e600";
+}
+
+.fanhui:before {
+  content: "\e64d";
 }
 
 .jiaotong:before {

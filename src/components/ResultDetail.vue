@@ -7,7 +7,17 @@
     </div>
     <van-steps direction="vertical" active-color="#1989fa" class="deatil-cell">
       <div class="cost-box">
+        <div slot="icon">
+          <svg class="icon solt-icon" aria-hidden="true">
+            <use xlink:href="#shijian"></use>
+          </svg>
+        </div>
         <span class="time">时间: {{ detail_item.time }} </span>
+        <div slot="icon">
+          <svg class="icon solt-icon" aria-hidden="true">
+            <use xlink:href="#huafei"></use>
+          </svg>
+        </div>
         <span class="money">花费: {{ detail_item.money }}元</span>
       </div>
       <div class="step-box">
@@ -21,8 +31,32 @@
           <p v-if="item.pos_start && item.pos_end">
             站点：{{ item.pos_start }} -> {{ item.pos_end }}
           </p>
+          <div class="detail-btn">
+            <van-button type="primary" size="small" @click="test" class="btn"
+              >站点详情</van-button
+            >
+            <van-button type="warning" size="small" @click="test" class="btn"
+              >购票</van-button
+            >
+          </div>
         </van-step>
       </div>
+      <van-popup v-model="test_show" position="right">
+        <van-steps direction="vertical" :active="-1">
+          <van-step>
+            <h3>【城市】物流状态1</h3>
+            <p>2016-07-12 12:40</p>
+          </van-step>
+          <van-step>
+            <h3>【城市】物流状态2</h3>
+            <p>2016-07-11 10:00</p>
+          </van-step>
+          <van-step>
+            <h3>快件已发货</h3>
+            <p>2016-07-10 09:30</p>
+          </van-step>
+        </van-steps>
+      </van-popup>
     </van-steps>
   </div>
 </template>
@@ -42,7 +76,9 @@ export default {
   },
   data() {
     return {
-      show: false
+      show: false,
+      test_show: false,
+      acc: 1
     };
   },
   methods: {
@@ -51,6 +87,9 @@ export default {
     },
     closeView() {
       this.show = false;
+    },
+    test() {
+      this.test_show = true;
     }
   }
 };
@@ -87,10 +126,9 @@ export default {
       margin: 10px auto;
       padding: 5px;
       display: flex;
-      text-align: center;
+      text-align: left;
       .time {
         width: 60%;
-        text-align: left;
       }
       .money {
         width: 40%;
@@ -106,6 +144,15 @@ export default {
           margin-bottom: 2px;
         }
       }
+      .detail-btn {
+        margin-top: 10px;
+        .btn {
+          margin: 0 10px;
+        }
+      }
+    }
+    .icon {
+      margin-right: 3px;
     }
   }
 }

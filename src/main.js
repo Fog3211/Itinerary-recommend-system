@@ -33,7 +33,8 @@ import {
   Step,
   Steps,
   DatetimePicker,
-  Popup
+  Popup,
+  Toast
 } from "vant";
 
 Vue.config.productionTip = false;
@@ -55,7 +56,8 @@ Vue.use(Button)
   .use(Step)
   .use(Steps)
   .use(DatetimePicker)
-  .use(Popup);
+  .use(Popup)
+  .use(Toast);
 
 setTimeout(() => {
   localStorage.clear();

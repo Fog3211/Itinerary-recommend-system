@@ -11,5 +11,8 @@ module.exports = {
       .set("_v", resolve("src/views"));
   },
   productionSourceMap: false,
-  publicPath: "./"
+  publicPath: "./",
+  devServer: {
+    proxy: "http://localhost:8081/roadsystem"
+  }
 };
