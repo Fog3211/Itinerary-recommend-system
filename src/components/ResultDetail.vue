@@ -12,7 +12,7 @@
             <use xlink:href="#shijian"></use>
           </svg>
         </div>
-        <span class="time">时间: {{ detail_item.time }} </span>
+        <span class="time">时间: {{ timeFormat(detail_item.time) }} </span>
         <div slot="icon">
           <svg class="icon solt-icon" aria-hidden="true">
             <use xlink:href="#huafei"></use>
@@ -26,34 +26,47 @@
           :key="index"
           class="step"
         >
-          <h3 class="name">{{ item.name }}</h3>
-          <p>出发时间：{{ item.start_time }}</p>
-          <p v-if="item.pos_start && item.pos_end">
-            站点：{{ item.pos_start }} -> {{ item.pos_end }}
+          <h3 class="name">
+            {{ changeVehicleName(item.transportnum) }}
+          </h3>
+          <p>票价： {{ item.price }}元</p>
+          <p>乘坐时间： {{ timeFormat(item.lasttime) }}</p>
+          <p v-if="item.ssta.staname && item.esta.staname">
+            路线：{{ item.ssta.staname }} -> {{ item.esta.staname }}
           </p>
           <div class="detail-btn">
-            <van-button type="primary" size="small" @click="test" class="btn"
+            <van-button
+              type="primary"
+              size="small"
+              @click="showStopDetail(item)"
+              class="btn"
+              v-if="checkVehicleType(item) === 0"
               >站点详情</van-button
             >
-            <van-button type="warning" size="small" @click="test" class="btn"
-              >购票</van-button
+            <van-button
+              type="warning"
+              size="small"
+              @click="showTicketDetail"
+              class="btn"
+              v-if="checkVehicleType(item) === 1"
+              >选票</van-button
             >
           </div>
         </van-step>
       </div>
-      <van-popup v-model="test_show" position="right">
+      <van-popup v-model="stop_detail" position="left">
         <van-steps direction="vertical" :active="-1">
-          <van-step>
-            <h3>【城市】物流状态1</h3>
-            <p>2016-07-12 12:40</p>
+          <van-step v-for="(item, index) in stop_detail_list" :key="index">
+            <h3>{{ item }}站</h3>
+            <!-- <p>{{ item.time }}分</p> -->
           </van-step>
-          <van-step>
-            <h3>【城市】物流状态2</h3>
-            <p>2016-07-11 10:00</p>
-          </van-step>
-          <van-step>
-            <h3>快件已发货</h3>
-            <p>2016-07-10 09:30</p>
+        </van-steps>
+      </van-popup>
+      <van-popup v-model="ticket_detail" position="right">
+        <van-steps direction="vertical" :active="-1">
+          <van-step v-for="(item, index) in ticket_detail_list" :key="index">
+            <h3>{{ item.ticket }}站</h3>
+            <p>{{ item.money }}元</p>
           </van-step>
         </van-steps>
       </van-popup>
@@ -77,8 +90,23 @@ export default {
   data() {
     return {
       show: false,
-      test_show: false,
-      acc: 1
+      stop_detail: false,
+      stop_detail_list: [],
+      ticket_detail: false,
+      ticket_detail_list: [
+        {
+          ticket: "一等座",
+          money: 10
+        },
+        {
+          ticket: "二等座",
+          money: 15
+        },
+        {
+          ticket: "三等座",
+          money: 30
+        }
+      ]
     };
   },
   methods: {
@@ -88,8 +116,49 @@ export default {
     closeView() {
       this.show = false;
     },
-    test() {
-      this.test_show = true;
+    showStopDetail(item) {
+      console.log(item);
+      this.stop_detail_list = item.stas.split(" ");
+      this.stop_detail = true;
+    },
+    showTicketDetail() {
+      this.ticket_detail = true;
+    },
+    changeVehicleName(name) {
+      if (!name) return;
+      if (name.includes("dt")) {
+        return "地铁" + Number(name.replace("dt", "")) + "号线";
+      } else if (name.includes("G")) {
+        return name + "号高铁";
+      } else {
+        return name + "号航班";
+      }
+    },
+    checkVehicleType(item) {
+      if (!item.transportnum) {
+        return -1;
+      }
+      if (item.transportnum.includes("dt")) {
+        return 0;
+      } else if (item.transportnum.includes("G")) {
+        return -1;
+      } else {
+        return 1;
+      }
+    },
+    timeFormat(t) {
+      if (!t) {
+        return "0分钟";
+      } else {
+        const day = Math.floor(t / (24 * 60));
+        const hour = Math.floor((t - day * 24 * 60) / 60);
+        const minute = t % 60;
+        return (
+          (day !== 0 ? day + "天" : "") +
+          (hour !== 0 ? hour + "小时" : "") +
+          (minute !== 0 ? minute + "分钟" : "")
+        );
+      }
     }
   }
 };

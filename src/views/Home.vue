@@ -57,7 +57,7 @@
               v-for="(item, index) in vehicle_list"
               clickable
               :key="index"
-              :title="item.name"
+              :title="changeVehicleName(item.name)"
             >
               <div slot="icon">
                 <svg class="icon solt-icon" aria-hidden="true">
@@ -120,12 +120,10 @@
         </van-tab>
       </van-tabs>
     </div>
-    <!-- 时间选择器 当前时间到未来十五天-->
+    <!-- 时间选择器 当天-->
     <van-popup v-model="select_time_show" position="bottom">
       <van-datetime-picker
-        type="datetime"
-        :min-date="minDate"
-        :max-date="maxDate"
+        type="time"
         @confirm="selectTime"
         @cancel="hiddenTimeSelect"
       />
@@ -136,6 +134,7 @@
 <script>
 import SearchResult from "_c/SearchResult";
 import axios from "axios";
+import qs from "qs";
 import { Toast } from "vant";
 
 export default {
@@ -163,67 +162,28 @@ export default {
           icon: "#buxing"
         }
       ],
-      sort_index: 0, //排序规则
+      sort_index: 1, //排序规则,默认花费最少
       active_vehicle: [],
-      vehicle_result: ["地铁", "高铁", "飞机"],
+      vehicle_result: ["subway", "railway", "flight"],
       vehicle_list: [
         {
-          name: "地铁",
+          name: "subway",
           icon: "#ditie"
         },
         {
-          name: "高铁",
+          name: "railway",
           icon: "#gaotie"
         },
         {
-          name: "飞机",
+          name: "flight",
           icon: "#feiji"
         }
       ],
-      result_list: [
-        {
-          time: "16小时07分钟",
-          money: "4536",
-          way: [
-            {
-              name: "高铁12号线",
-              start_time: "10:22",
-              pos_start: "北京站",
-              pos_end: "南京站"
-            },
-            {
-              name: "133号航班",
-              start_time: "12:22",
-              pos_start: "上海站",
-              pos_end: "青岛站"
-            },
-            {
-              name: "地铁21号线",
-              start_time: "04:22",
-              pos_start: "青岛北站",
-              pos_end: "港头李站"
-            },
-            {
-              name: "高铁12号线",
-              start_time: "10:22"
-            },
-            {
-              name: "133号航班",
-              start_time: "12:22"
-            },
-            {
-              name: "地铁21号线",
-              start_time: "04:22"
-            }
-          ]
-        }
-      ],
+      result_list: [],
       loading: false,
       start_time: "",
       active_select: [],
-      select_time_show: false,
-      minDate: "",
-      maxDate: ""
+      select_time_show: false
     };
   },
   watch: {
@@ -246,6 +206,9 @@ export default {
         Toast("请检查输入");
         return;
       }
+      // 清空上次查询结果
+      this.result_list = [];
+
       let sort_index = "time";
       if (this.sort_index === 1) {
         sort_index = "price";
@@ -255,21 +218,37 @@ export default {
         sort_index = "time";
       }
       const req_data = {
-        start: this.position.start.trim(),
-        end: this.position.end.trim(),
-        vehicle: this.vehicle_result,
-        sort_type: sort_index
+        sta: this.position.start.trim(),
+        eta: this.position.end.trim(),
+        transports: this.vehicle_result,
+        sorttype: sort_index,
+        cal: this.changeStartTime(this.start_time)
       };
-      console.log("发送的数据", req_data);
+      // console.log("序列化之前", req_data);
+      // console.log("序列化之后", qs.stringify(req_data));
       this.loading = true;
       axios
-        .post("/roadindex", JSON.stringify(req_data))
+        .post("/roadindex", qs.stringify(req_data))
         .then(res => {
+          // console.log(res.data);
           this.loading = false;
-          console.log(res);
+          if (res.data.code === 1) {
+            // console.log(res.data.msg.routemsgs);
+            res.data.msg.routemsgs.map(item => {
+              this.result_list.push({
+                time: item.totallasttime,
+                money: item.totalprice,
+                way: item.route.roadMessages
+              });
+            });
+            // console.log(this.result_list);
+          } else {
+            Toast.fail("没有合适的方案");
+          }
         })
         .catch(err => {
           console.log(err);
+          Toast.fail("出错了，请重试");
         });
     },
     checkInput() {
@@ -290,24 +269,14 @@ export default {
     },
     showTimeSelect() {
       this.select_time_show = true;
-      this.minDate = new Date();
-      this.maxDate = new Date(new Date().setDate(new Date().getDate() + 15));
     },
     hiddenTimeSelect() {
       this.select_time_show = false;
     },
     selectTime(value) {
-      this.start_time = this.formatDate(value);
+      // console.log(value);
+      this.start_time = value;
       this.select_time_show = false;
-    },
-    formatDate(value) {
-      return `${value.getMonth() + 1}月${value.getDate()}日 ${value
-        .getHours()
-        .toString()
-        .padStart(2, "0")}时${value
-        .getMinutes()
-        .toString()
-        .padStart(2, "0")}分`;
     },
     locationStart() {
       // console.log("定位当前坐标");
@@ -315,6 +284,24 @@ export default {
     },
     locationEnd() {
       this.$router.push("/location?pos=end");
+    },
+    changeVehicleName(name) {
+      if (name === "subway") {
+        return "地铁";
+      } else if (name === "railway") {
+        return "高铁";
+      } else {
+        return "飞机";
+      }
+    },
+    changeStartTime(t) {
+      let str = "2019-1-1 00:00:00";
+      if (t) {
+        const now = new Date();
+        str = `${now.getFullYear()}-${now.getMonth() +
+          1}-${now.getDate()} ${t}:00`;
+      }
+      return str;
     }
   },
   mounted() {
