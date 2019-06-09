@@ -1,6 +1,10 @@
 <template>
   <div>
-    <p v-if="result_list.length === 0">无结果</p>
+    <div v-if="result_list.length === 0" class="empty">
+      <p class="info">
+        没有合适的出行方案
+      </p>
+    </div>
     <ul v-else>
       <li
         v-for="(parent, pindex) in result_list"
@@ -85,6 +89,18 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.empty {
+  padding-top: 20px;
+  width: 100%;
+  min-height: 400px;
+  background-image: url("../assets/img/empty-result.png");
+  background-size: cover;
+  .info {
+    text-align: center;
+    color: #999;
+    letter-spacing: 2px;
+  }
+}
 .result-cell {
   background-color: #fff;
   border-bottom: 1px solid #ccc;

@@ -233,7 +233,7 @@ export default {
           // console.log(res.data);
           this.loading = false;
           if (res.data.code === 1) {
-            // console.log(res.data.msg.routemsgs);
+            console.log(res.data.msg.routemsgs);
             res.data.msg.routemsgs.map(item => {
               this.result_list.push({
                 time: item.totallasttime,
@@ -295,11 +295,14 @@ export default {
       }
     },
     changeStartTime(t) {
+      const now = new Date();
       let str = "2019-1-1 00:00:00";
       if (t) {
-        const now = new Date();
         str = `${now.getFullYear()}-${now.getMonth() +
           1}-${now.getDate()} ${t}:00`;
+      } else {
+        str = `${now.getFullYear()}-${now.getMonth() +
+          1}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
       }
       return str;
     }

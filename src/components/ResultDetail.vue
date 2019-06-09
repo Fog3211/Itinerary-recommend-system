@@ -3,7 +3,7 @@
   <div v-if="show" class="detail">
     <div class="map-box">
       <van-icon name="close" class="back-icon" @click="closeView" />
-      <route-map></route-map>
+      <route-map :way="detail_item.way"></route-map>
     </div>
     <van-steps direction="vertical" active-color="#1989fa" class="deatil-cell">
       <div class="cost-box">
@@ -30,7 +30,8 @@
             {{ changeVehicleName(item.transportnum) }}
           </h3>
           <p>票价： {{ item.price }}元</p>
-          <p>乘坐时间： {{ timeFormat(item.lasttime) }}</p>
+          <p>乘坐时长： {{ timeFormat(item.lasttime) }}</p>
+          <p>出发时间： {{ dateFormat(item.offdate) }}</p>
           <p v-if="item.ssta.staname && item.esta.staname">
             路线：{{ item.ssta.staname }} -> {{ item.esta.staname }}
           </p>
@@ -43,26 +44,25 @@
               v-if="checkVehicleType(item) === 0"
               >站点详情</van-button
             >
-            <van-button
+            <!-- <van-button
               type="warning"
               size="small"
-              @click="showTicketDetail"
+              @click="showTicketDetail(item)"
               class="btn"
-              v-if="checkVehicleType(item) === 1"
+              v-if="checkVehicleType(item) !== 0"
               >选票</van-button
-            >
+            > -->
           </div>
         </van-step>
       </div>
-      <van-popup v-model="stop_detail" position="left">
+      <van-popup v-model="stop_detail" position="left" class="stop-detail">
         <van-steps direction="vertical" :active="-1">
           <van-step v-for="(item, index) in stop_detail_list" :key="index">
             <h3>{{ item }}站</h3>
-            <!-- <p>{{ item.time }}分</p> -->
           </van-step>
         </van-steps>
       </van-popup>
-      <van-popup v-model="ticket_detail" position="right">
+      <van-popup v-model="ticket_detail" position="right" class="ticket-detail">
         <van-steps direction="vertical" :active="-1">
           <van-step v-for="(item, index) in ticket_detail_list" :key="index">
             <h3>{{ item.ticket }}站</h3>
@@ -76,6 +76,9 @@
 
 <script>
 import RouteMap from "_c/RouteMap";
+import axios from "axios";
+import qs from "qs";
+
 export default {
   name: "ResultDetail",
   components: {
@@ -94,18 +97,6 @@ export default {
       stop_detail_list: [],
       ticket_detail: false,
       ticket_detail_list: [
-        {
-          ticket: "一等座",
-          money: 10
-        },
-        {
-          ticket: "二等座",
-          money: 15
-        },
-        {
-          ticket: "三等座",
-          money: 30
-        }
       ]
     };
   },
@@ -117,12 +108,33 @@ export default {
       this.show = false;
     },
     showStopDetail(item) {
-      console.log(item);
+      // console.log(item);
       this.stop_detail_list = item.stas.split(" ");
       this.stop_detail = true;
     },
-    showTicketDetail() {
+    showTicketDetail(item) {
+      if (!item.stas) {
+        return;
+      }
       this.ticket_detail = true;
+
+      const stop_arr = item.stas.split(" ");
+      const req_data = {
+        ssta: stop_arr[0],
+        esta: stop_arr[1]
+      };
+      // console.log(req_data);
+      if (this.checkVehicleType(item) === -1) {
+        axios.post("/railway", qs.stringify(req_data)).then(res => {
+          console.log(res.data);
+        });
+      } else if (this.checkVehicleType(item) === 1) {
+        axios.post("/flightindex", qs.stringify(req_data)).then(res => {
+          console.log(res.data);
+        });
+      } else {
+        return;
+      }
     },
     changeVehicleName(name) {
       if (!name) return;
@@ -158,6 +170,13 @@ export default {
           (hour !== 0 ? hour + "小时" : "") +
           (minute !== 0 ? minute + "分钟" : "")
         );
+      }
+    },
+    dateFormat(t) {
+      if (!t) {
+        return "无";
+      } else {
+        return (t = t.split(" ")[1].slice(0, 5));
       }
     }
   }
@@ -219,10 +238,18 @@ export default {
           margin: 0 10px;
         }
       }
+      p {
+        line-height: 20px;
+      }
     }
     .icon {
       margin-right: 3px;
     }
+  }
+  .stop-detail,
+  .ticket-detail {
+    width: 150px;
+    overflow: hidden;
   }
 }
 </style>
