@@ -233,7 +233,7 @@ export default {
           // console.log(res.data);
           this.loading = false;
           if (res.data.code === 1) {
-            console.log(res.data.msg.routemsgs);
+            // console.log(res.data.msg.routemsgs);
             res.data.msg.routemsgs.map(item => {
               this.result_list.push({
                 time: item.totallasttime,

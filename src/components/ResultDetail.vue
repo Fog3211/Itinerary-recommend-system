@@ -44,14 +44,14 @@
               v-if="checkVehicleType(item) === 0"
               >站点详情</van-button
             >
-            <!-- <van-button
+            <van-button
               type="warning"
               size="small"
               @click="showTicketDetail(item)"
               class="btn"
               v-if="checkVehicleType(item) !== 0"
               >选票</van-button
-            > -->
+            >
           </div>
         </van-step>
       </div>
@@ -65,7 +65,7 @@
       <van-popup v-model="ticket_detail" position="right" class="ticket-detail">
         <van-steps direction="vertical" :active="-1">
           <van-step v-for="(item, index) in ticket_detail_list" :key="index">
-            <h3>{{ item.ticket }}站</h3>
+            <h3>{{ item.ticket }}</h3>
             <p>{{ item.money }}元</p>
           </van-step>
         </van-steps>
@@ -96,8 +96,7 @@ export default {
       stop_detail: false,
       stop_detail_list: [],
       ticket_detail: false,
-      ticket_detail_list: [
-      ]
+      ticket_detail_list: []
     };
   },
   methods: {
@@ -108,7 +107,6 @@ export default {
       this.show = false;
     },
     showStopDetail(item) {
-      // console.log(item);
       this.stop_detail_list = item.stas.split(" ");
       this.stop_detail = true;
     },
@@ -116,22 +114,48 @@ export default {
       if (!item.stas) {
         return;
       }
-      this.ticket_detail = true;
+      this.ticket_detail_list = [];
 
       const stop_arr = item.stas.split(" ");
-      const req_data = {
-        ssta: stop_arr[0],
-        esta: stop_arr[1]
-      };
-      // console.log(req_data);
       if (this.checkVehicleType(item) === -1) {
+        const req_data = {
+          ssta: stop_arr[0],
+          esta: stop_arr[1]
+        };
         axios.post("/railway", qs.stringify(req_data)).then(res => {
-          console.log(res.data);
+          // console.log(res.data);
+          if (res.data.code === 1 && res.data.msg.length !== 0) {
+            const item = res.data.msg[0];
+            this.ticket_detail_list.push(
+              {
+                ticket: "高等座",
+                money: item.fseat
+              },
+              {
+                ticket: "低等座",
+                money: item.sseat
+              }
+            );
+          }
         });
+        this.ticket_detail = true;
       } else if (this.checkVehicleType(item) === 1) {
+        const req_data = {
+          sadress: stop_arr[0],
+          eadress: stop_arr[1]
+        };
         axios.post("/flightindex", qs.stringify(req_data)).then(res => {
-          console.log(res.data);
+          // console.log(res.data);
+          if (res.data.code === 1 && res.data.msg.length !== 0) {
+            res.data.msg.map(item => {
+              this.ticket_detail_list.push({
+                ticket: item.type + " " + item.flynum,
+                money: item.price
+              });
+            });
+          }
         });
+        this.ticket_detail = true;
       } else {
         return;
       }

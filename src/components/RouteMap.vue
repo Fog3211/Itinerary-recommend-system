@@ -21,7 +21,6 @@ export default {
       map: map,
       policy: AMap.DrivingPolicy.LEAST_TIME
     });
-    
     const points = [];
     this.way.map((item, index) => {
       if (index === 0) {
