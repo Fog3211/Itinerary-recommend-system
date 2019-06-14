@@ -18,7 +18,9 @@
             <use xlink:href="#huafei"></use>
           </svg>
         </div>
-        <span class="money">花费: {{ detail_item.money }}元</span>
+        <span class="money"
+          >花费: {{ all_cost !== -1 ? all_cost : detail_item.money }}元</span
+        >
       </div>
       <div class="step-box">
         <van-step
@@ -31,7 +33,18 @@
           </h3>
           <p>票价： {{ item.price }}元</p>
           <p>乘坐时长： {{ timeFormat(item.lasttime) }}</p>
+          <!-- 等待时长： 本站出发时间-（上一站到达时间+上一站到本站的乘坐时间） -->
+          <!-- <p v-if="index !== 0">
+            {{
+              waitTimeFormat(
+                detail_item.way[index].offdate,
+                detail_item.way[index].lasttime,
+                detail_item.way[index + 1] && detail_item.way[index + 1].offdate
+              )
+            }}
+          </p> -->
           <p>出发时间： {{ dateFormat(item.offdate) }}</p>
+          <p>下车时间： {{ dateFormat(item.offdate, item.lasttime) }}</p>
           <p v-if="item.ssta.staname && item.esta.staname">
             路线：{{ item.ssta.staname }} -> {{ item.esta.staname }}
           </p>
@@ -50,7 +63,7 @@
               @click="showTicketDetail(item)"
               class="btn"
               v-if="checkVehicleType(item) !== 0"
-              >选票</van-button
+              >票价选择</van-button
             >
           </div>
         </van-step>
@@ -65,8 +78,10 @@
       <van-popup v-model="ticket_detail" position="right" class="ticket-detail">
         <van-steps direction="vertical" :active="-1">
           <van-step v-for="(item, index) in ticket_detail_list" :key="index">
-            <h3>{{ item.ticket }}</h3>
-            <p>{{ item.money }}元</p>
+            <div @click="selectTicket(item.money)" class="ticket-box">
+              <h3>{{ item.ticket }}</h3>
+              <p>{{ item.money }}元</p>
+            </div>
           </van-step>
         </van-steps>
       </van-popup>
@@ -78,6 +93,7 @@
 import RouteMap from "_c/RouteMap";
 import axios from "axios";
 import qs from "qs";
+import { Toast } from "vant";
 
 export default {
   name: "ResultDetail",
@@ -96,7 +112,9 @@ export default {
       stop_detail: false,
       stop_detail_list: [],
       ticket_detail: false,
-      ticket_detail_list: []
+      ticket_detail_list: [],
+      all_cost: -1,
+      ticket_price: 0
     };
   },
   methods: {
@@ -115,6 +133,7 @@ export default {
         return;
       }
       this.ticket_detail_list = [];
+      this.ticket_price = item.price;
 
       const stop_arr = item.stas.split(" ");
       if (this.checkVehicleType(item) === -1) {
@@ -123,12 +142,16 @@ export default {
           esta: stop_arr[1]
         };
         axios.post("/railway", qs.stringify(req_data)).then(res => {
-          // console.log(res.data);
+          // console.log("railway", res.data);
           if (res.data.code === 1 && res.data.msg.length !== 0) {
             const item = res.data.msg[0];
             this.ticket_detail_list.push(
               {
                 ticket: "高等座",
+                money: item.bseat
+              },
+              {
+                ticket: "中等座",
                 money: item.fseat
               },
               {
@@ -145,7 +168,7 @@ export default {
           eadress: stop_arr[1]
         };
         axios.post("/flightindex", qs.stringify(req_data)).then(res => {
-          // console.log(res.data);
+          console.log("flightindex", res.data);
           if (res.data.code === 1 && res.data.msg.length !== 0) {
             res.data.msg.map(item => {
               this.ticket_detail_list.push({
@@ -196,12 +219,30 @@ export default {
         );
       }
     },
-    dateFormat(t) {
-      if (!t) {
-        return "无";
+    dateFormat(t, lt) {
+      if (!lt) {
+        if (!t) {
+          return "无";
+        } else {
+          return (t = t.split(" ")[1].slice(0, 5));
+        }
       } else {
-        return (t = t.split(" ")[1].slice(0, 5));
+        return this.arrivalTime((t = t.split(" ")[1].slice(0, 5)), lt);
       }
+    },
+    // 计算到达时间
+    arrivalTime(str, n) {
+      let hour = Number(str.slice(0, 2));
+      let minute = Number(str.slice(3, 5));
+      hour = Math.floor(hour + (minute + n) / 60) % 24;
+      minute = (minute + n) % 60;
+      // 前置补零
+      return `${("0" + hour).slice(-2)}:${("0" + minute).slice(-2)}`;
+    },
+    selectTicket(money) {
+      Toast.success("选票成功");
+      this.all_cost = this.detail_item.money - this.ticket_price + money;
+      this.ticket_detail = false;
     }
   }
 };
@@ -273,7 +314,10 @@ export default {
   .stop-detail,
   .ticket-detail {
     width: 150px;
-    overflow: hidden;
+    overflow: auto;
+    .ticket-box:active {
+      background-color: #e6e3dd;
+    }
   }
 }
 </style>

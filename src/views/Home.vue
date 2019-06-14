@@ -302,7 +302,7 @@ export default {
           1}-${now.getDate()} ${t}:00`;
       } else {
         str = `${now.getFullYear()}-${now.getMonth() +
-          1}-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+          1}-${now.getDate()} 00:00:00`;
       }
       return str;
     }
