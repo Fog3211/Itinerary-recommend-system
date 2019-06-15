@@ -168,7 +168,7 @@ export default {
           eadress: stop_arr[1]
         };
         axios.post("/flightindex", qs.stringify(req_data)).then(res => {
-          console.log("flightindex", res.data);
+          // console.log("flightindex", res.data);
           if (res.data.code === 1 && res.data.msg.length !== 0) {
             res.data.msg.map(item => {
               this.ticket_detail_list.push({
