@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 命名空间 ,一般写成 包名+类名的形式-->
+<mapper namespace="com.qianfeng.dao.IFlightDao">
+	
+	<resultMap type="flight" id="flightMapper">
+		<id property="flynum" column="flynum"/>
+		<result property="flyfirm" column="flyfirm" />
+		<result property="stime" column="stime"/>
+		<result property="etime" column="etime"/>
+		<result property="sadress" column="sadress"/>
+		<result property="eadress" column="eadress"/>
+		<result property="rate" column="rate"/>
+		<result property="price" column="price"/>
+		<result property="type" column="type"/>
+	</resultMap>
+	
+
+	<select id="findFlightByFlyNum" parameterType="String" resultType="flight">
+	    <!-- select * from subway where stas like CONCAT('%',#{sta},'%') -->
+		<!-- select * from subway -->
+		select * from flight 
+		<where>
+		<if test="_parameter !='' ">
+	      flynum = #{flynum}	
+		</if>
+		
+		</where>	
+	</select>
+	
+	<select id="findAllFlightBySadressAndEadress" resultMap="flightMapper">
+	    <!-- select * from subway where stas like CONCAT('%',#{sta},'%') -->
+		<!-- select * from subway -->
+		select * from flight 
+		<where>
+		
+	      sadress = #{sadress} and eadress = #{eadress}	
+		
+		
+		</where>	
+	</select>
+</mapper>
+
+
+
+
+

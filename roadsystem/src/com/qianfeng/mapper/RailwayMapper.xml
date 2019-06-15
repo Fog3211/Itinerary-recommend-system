@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 命名空间 ,一般写成 包名+类名的形式-->
+<mapper namespace="com.qianfeng.dao.IRailwayDao">
+	
+	<resultMap type="railway" id="railwayMapper">
+		<id property="tnum" column="tnum"/>
+		<result property="stime" column="stime" />
+		<result property="etime" column="etime"/>
+		<result property="last" column="last"/>
+	    <result property="ssta" column="ssta"/>
+	    <result property="esta" column="esta"/>
+	    <result property="fseat" column="fseat"/>
+	    <result property="sseat" column="sseat"/>
+	    <result property="bseat" column="bseat"/>
+	</resultMap>
+	
+	<select id="findRailwayByTNum" parameterType="String" resultType="Railway">
+	    <!-- select * from subway where stas like CONCAT('%',#{sta},'%') -->
+		<!-- select * from subway -->
+		select * from railway
+		<where>
+		
+	      tnum =  #{tnum}	
+		
+		
+		</where>
+	</select>
+	
+	<select id="findAllRailwayBySstaAndEsta" resultMap="railwayMapper">
+	    <!-- select * from subway where stas like CONCAT('%',#{sta},'%') -->
+		<!-- select * from subway -->
+		select * from railway
+		<where>
+		
+	      ssta = #{ssta} and esta = #{esta}
+		
+		
+		</where>
+	</select>
+	
+		<select id="findAllRailwayByTNum" resultMap="railwayMapper">
+	    <!-- select * from subway where stas like CONCAT('%',#{sta},'%') -->
+		<!-- select * from subway -->
+		select * from railway
+		<where>
+	      tnum = #{tnum}
+		</where>
+	</select>
+	
+
+</mapper>
+
+
+
+
+

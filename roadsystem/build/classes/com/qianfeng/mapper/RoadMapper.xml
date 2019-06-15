@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 命名空间 ,一般写成 包名+类名的形式-->
+<mapper namespace="com.qianfeng.dao.IRoadDao">
+
+      	<resultMap type="road" id="roadMapper">
+		<id property="rdnum" column="rdnum"/>
+		<result property="sstanum" column="sstanum" />
+		<result property="estanum" column="estanum"/>
+		<result property="stas" column="stas"/>
+       <result property="transportnum" column="transportnum"/>
+       <result property="doftime" column="doftime"/>
+       <result property="doltime" column="doltime"/>
+       <result property="lasttime" column="lasttime"/>
+       <result property="stacount" column="stacount"/>
+       </resultMap>
+	
+	
+	<select id="findRoadByStas" parameterType="String" resultType="Road">
+	   
+		select * from road where stas like CONCAT('%',#{stas,jdbcType=VARCHAR},'%')	
+	
+		
+	</select>
+	
+	<select id="findRoadBySsta" parameterType="String" resultType="Road">
+	   
+		select * from road  where  sstanum=#{staname}
+		
+	</select>
+	
+	<select id="findRoadByEsta" parameterType="String" resultType="Road">
+	   
+		select * from road  where  estanum=#{staname}
+		
+	</select>
+	
+	<select id="findAllRoadByStas" resultMap="roadMapper">
+	   
+		<!-- select  rdnum,sstanum,estanum,LTRIM(RTRIM(stas)),transportnum,doftime,doltime,lasttime,price,stacount from road  where  stas like CONCAT('% ',#{staname,jdbcType=VARCHAR},' %')-->		
+     <if test="flag == 'm' ">
+        select  * from road  where  stas like CONCAT('% ',#{staname,jdbcType=VARCHAR},' %')	
+     </if>
+     <if test="flag == 's' ">
+         select  * from road  where  stas like CONCAT(#{staname,jdbcType=VARCHAR},'%')	
+     </if>
+     <if test="flag == 'e' ">
+       select  * from road  where  stas like CONCAT('%',#{staname,jdbcType=VARCHAR})
+     </if>
+     
+ 
+ <!-- '% '匹配stas -->
+	</select>
+	
+	<select id="findAllRoadBySsta" parameterType="String" resultMap="roadMapper">
+	   
+		select * from road  where  sstanum=#{staname}
+		
+	</select>
+	<select id="findAllRoadByEsta" parameterType="String" resultMap="roadMapper">
+	   
+		select * from road  where  estanum=#{staname}
+		
+	</select>
+	
+	<select id="findRoadByStasAndEstaNum" resultType="road">
+	   
+		select * from road  where  estanum=#{estanum} and stas like CONCAT('% ',#{stas,jdbcType=VARCHAR},' %');
+		
+	</select>
+	
+	<select id="findRoadBySstaNumAndEstaNum" resultType="road">
+	   
+		select * from road  where  estanum=#{estanum} and sstanum=#{sstanum};
+		
+	</select>
+	
+   <select id="findRoadBySstaNumAndStas" resultType="road">
+	   
+		select * from road  where  stas like CONCAT('% ',#{stas,jdbcType=VARCHAR},' %') and sstanum=#{sstanum};
+		
+	</select>
+	
+	 <select id="findStimeByRdNumAndStaName" resultType="java.sql.Time">
+	   
+		select stime from road_station where rdnum=#{rdnum} and staname=#{staname};
+		
+	</select>
+	
+	<select id="findEtimeByRdNumAndStaName" resultType="java.sql.Time">
+	   
+		select etime from road_station  where rdnum=#{rdnum} and staname=#{staname};
+		
+	</select>
+	
+	<select id="findChangeTimeByStaNameAndSroadNumAndEroadNum" resultType="int">
+	   
+		select changetime from change_copy where sroadnum=#{sroadnum} and eroadnum=#{eroadnum} and staname=#{staname};
+		
+    </select>
+	
+</mapper>
+
+
+
+
+

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	
+	
+	<settings>
+	<!--     启用懒加载，必须按照下面方式配置 -->
+		<setting name="lazyLoadingEnabled" value="true"/>
+		<!-- 将积极加载改为消极加载即按需加载。必须写,且为false才会懒加载  --> 
+		<setting name="aggressiveLazyLoading" value="false"/>
+		<!-- 开启二级缓存 -->
+		<setting name="cacheEnabled" value="true"/>
+	</settings>
+
+	<!-- 设置别名 -->
+	<typeAliases>
+		<typeAlias type="com.qianfeng.entity.User" alias="user"></typeAlias>
+		<typeAlias type="com.qianfeng.entity.Subway" alias="subway"></typeAlias>
+		<typeAlias type="com.qianfeng.entity.Station" alias="station"></typeAlias>
+		<typeAlias type="com.qianfeng.entity.Road" alias="road"></typeAlias>
+		<typeAlias type="com.qianfeng.entity.Railway" alias="railway"></typeAlias>
+		<typeAlias type="com.qianfeng.entity.Flight" alias="flight"></typeAlias>
+		<!-- <typeAlias type="com.qianfeng.entity.Bookwriter" alias="bookwriter"></typeAlias> -->
+	</typeAliases>
+
+	
+	<!-- 加载映射文件 -->
+	<mappers>
+		
+	</mappers>
+</configuration>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 命名空间 ,一般写成 包名+类名的形式-->
+<mapper namespace="com.qianfeng.dao.ISubwayDao">
+	
+	<resultMap type="subway" id="subwayMapper">
+		<id property="subnum" column="subnum"/>
+		<result property="stanum" column="stanum" />
+		<result property="stas" column="stas"/>
+	</resultMap>
+	
+<!-- 	<resultMap type="bookwriter" id="bookwriterMapper">
+		<id property="bwid" column="bwid"/>
+		<result property="bwname" column="bwname" />
+		<result property="bwsex" column="bwsex"/>
+	</resultMap> -->
+	
+	<!-- <select id="findAllBook" parameterType="String" resultMap="bookMapper">
+		select bookID,bname,store,price,view,page,typename,bwname from books,booktype,bwriter where books.btypeid=booktype.btypeid and bwriter.bwid=books.bwid and books.bname like CONCAT('%',#{0},'%') and bwriter.bwname like CONCAT('%',#{2},'%') and booktype.typename like CONCAT('%',#{1},'%')      
+	</select>
+	
+	<select id="findAllBookObject" parameterType="book" resultMap="bookMapper">
+		select bookID,bname,store,price,view,page,typename,bwname from books,booktype,bwriter where books.btypeid=booktype.btypeid and bwriter.bwid=books.bwid and books.bname like CONCAT('%',#{bname},'%') and bwriter.bwname like CONCAT('%',#{bwname},'%') and booktype.typename like CONCAT('%',#{booktype},'%')      
+	</select>
+	
+	<select id="findAll" resultMap="bookMapper">
+		select bookID,bname,store,price,view,page,typename from books,booktype where books.btypeid=booktype.btypeid
+	</select>
+	
+	<select id="findAllType" resultMap="booktypeMapper">
+		select * from booktype
+	</select>
+	
+	<insert id="addUser" parameterType="user">
+		insert into user(username,password,email,role) values(#{username},#{password},#{email},#{role})
+	</insert>	 -->
+	<select id="findAll" resultMap="subwayMapper">
+		select * from subway
+	</select>
+	
+	<select id="findAllSubwayBySta" parameterType="String" resultMap="subwayMapper">
+	    <!-- select * from subway where stas like CONCAT('%',#{sta},'%') -->
+		<!-- select * from subway -->
+		select * from subway 
+		<where>
+		<if test="_parameter !='' ">
+	      stas like CONCAT('%',#{sta,jdbcType=VARCHAR},'%')	
+		</if>
+		
+		</where>
+	</select>
+	
+	<select id="findSubwayBySubNum" parameterType="String" resultType="Subway">
+	    <!-- select * from subway where stas like CONCAT('%',#{sta},'%') -->
+		<!-- select * from subway -->
+		select * from subway 
+		<where>
+		<if test="_parameter !='' ">
+	      subnum =  #{subnum}	
+		</if>
+		
+		</where>
+	</select>
+	
+	
+</mapper>
+
+
+
+
+
